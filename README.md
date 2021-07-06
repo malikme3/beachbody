@@ -2,6 +2,7 @@
 
 git clone https://github.com/malikme3/beachbody.git
 cd beachbody
+git checkout develop
 yarn // install dependencies
 
 ## offline test
