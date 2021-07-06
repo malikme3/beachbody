@@ -1,0 +1,39 @@
+service: beachbody-assignment
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+  - serverless-plugin-typescript-express
+
+package:
+  individually: true
+
+custom:
+  webpack:
+    packager: yarn
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs14.x
+
+functions:
+  getSuggestions:
+    handler: src/handlers/suggestions.getSuggestions
+    # authroizer
+    # role
+    events:
+      - http:
+          path: /sugesstions
+          method: get
+          querystrings:
+            date: true
+            latitude: false
+            longitude: true
+            # application json schema
+  notFound:
+    handler: src/handlers/not-found.notFound
+    events:
+      - http:
+          path: /
+          method: get
