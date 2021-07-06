@@ -10,15 +10,10 @@ interface HelloResponse {
 }
 
 const getSuggestions: Handler = async (event: any, context: Context) => {
-  const { date, latitude, longitude } = event.queryStringParameters.query;
-  const requestedLocation: Location = {
-    latitude,
-    longitude,
-  };
-
+  const query: any = event.queryStringParameters;
   const resp: Gym[] | any = await new SuggestionsController().getSuggestions(
-    date,
-    requestedLocation
+    query.date,
+    { latitude: query.latitude, longitude: query.longitude } as any
   );
   // logs monitoring
   CommonUtils.log("getSuggestions", "response", resp);

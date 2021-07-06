@@ -6,11 +6,8 @@ interface HelloResponse {
   body: any;
 }
 
-const notFound: Handler = (
-  event: any,
-  context: Context,
-  callback: Callback
-) => {
+const notFound: Handler = (event: any, context: Context) => {
+  CommonUtils.log("getSuggestions", "request", event.request);
   const response: HelloResponse = {
     statusCode: 404,
     body: CommonUtils.notFoundError("PATH"),

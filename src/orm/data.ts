@@ -2,6 +2,7 @@ import { DailySchedule, TimeSlot, Gym } from "../domain/suggestion.domain";
 import { v4 as uuidv4 } from "uuid";
 
 // this is place holder for mock data
+// TODO: get Data from DB
 
 export const getGymsSessions = async (): Promise<Gym[]> => {
   let gymsWeekSessions: Gym[] = [];
@@ -63,16 +64,16 @@ const _weeks1 = [
 
 const gymsData = [
   {
-    id: "01",
+    id: 1001,
     city: "LA",
     name: "gym1",
     code: "101",
     score: 0.3,
-    address: { latitude: 34.002827, longitude: -118.331835 },
+    address: { latitude: 33.9540723, longitude: 118.3636729 },
     timeSlots: ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM"],
   },
   {
-    id: "02",
+    id: 1002,
     city: "LA",
     name: "gym2",
     code: "102",
@@ -81,12 +82,12 @@ const gymsData = [
     timeSlots: ["10:00 AM", "12:00 PM", "2:00 PM", "3:00 PM"],
   },
   {
-    id: "03",
+    id: 1003,
     city: "LA",
     name: "gym3",
     score: 0,
     code: "103",
-    address: { latitude: 34.002827, longitude: -118.331835 },
+    address: { latitude: 33.9988632, longitude: -118.3498971 },
     timeSlots: ["11:00 AM", "1:00 PM", "3:00 PM"],
   },
 ];

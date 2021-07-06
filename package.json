@@ -7,6 +7,9 @@
     "test": "yarn jest --coverage",
     "local": "sls invoke local -f -p requsts-event/getSuggestions.json"
   },
+  "pre-push": [
+    "test"
+  ],
   "keywords": [],
   "author": "zulifqar ahmad",
   "license": "ISC",

@@ -6,6 +6,7 @@ export interface Gym {
   score: number;
   location: Location;
   weekSchedule: DailySchedule[];
+  distance?: number;
 }
 
 export interface DailySchedule {
@@ -25,6 +26,6 @@ export interface TimeSlot {
 }
 
 export interface Location {
-  latitude: string;
-  longitude: string;
+  latitude: number;
+  longitude: number;
 }

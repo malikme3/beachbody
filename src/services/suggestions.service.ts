@@ -27,12 +27,28 @@ export class SuggestionsService {
         }
       });
 
+      if (requestedLocation) {
+        filteredClasses.map(
+          (gym: Gym) =>
+            (gym["distance"] = getDistance(
+              {
+                latitude: requestedLocation.latitude,
+                longitude: requestedLocation.longitude,
+              },
+              {
+                latitude: gym.location.latitude,
+                longitude: gym.location.longitude,
+              }
+            ))
+        );
+        const sorted = CommonUtils.sortClassedByDistance(filteredClasses);
+        console.log("........ sorted \n\n", sorted);
+      }
+
       // sort by score ['descending']
       const classesSortedByScore =
         CommonUtils.sortClassedByScore(filteredClasses);
-      if (requestedLocation) {
-        console.log("........ requestedLocation ", requestedLocation);
-      }
+
       return classesSortedByScore;
     } catch (error) {
       console.error("Error while getSuggestions()", error);

@@ -35,6 +35,17 @@ export class CommonUtils {
       return 0;
     });
   }
+  // distance in meter[number]
+  static sortClassedByDistance(gymsClasses: Gym[]): Gym[] {
+    return gymsClasses.sort(
+      ({ distance: distanceA }: Gym, { distance: distanceB }: Gym) => {
+        if (!distanceB || !distanceA) return 0;
+        if (distanceA < distanceB) return -1;
+        if (distanceA > distanceB) return 2;
+        return 0;
+      }
+    );
+  }
 
   static getDateAndTime(timestamp: string): string {
     const date = new Date(timestamp);
@@ -93,7 +104,6 @@ export class CommonUtils {
     return classDay > requestedDay ? true : false;
   }
 
- 
   hasDuplicates(array: any[]): boolean {
     return new Set(array).size !== array.length;
   }
