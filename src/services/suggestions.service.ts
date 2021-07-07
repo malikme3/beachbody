@@ -1,4 +1,4 @@
-import { Gym, Location } from "../domain/suggestion.domain";
+import { Gym, Location, TimeSlot } from "../domain/suggestion.domain";
 import { getDistance } from "geolib";
 import { getGymsSessions } from "../orm/data";
 import { CommonUtils } from "../utils/common.utils";
@@ -20,9 +20,15 @@ export class SuggestionsService {
           availableClasses.push(gym);
         }
       });
-      // if location provided, order by nearest location first
-      if (requestedLocation) {
-        availableClasses.map(
+      /**  if location corrdinate are provided in request &&
+       *    more than one classes are available for same timeSlot
+       *    then order by nearest location first
+       */
+      if (
+        requestedLocation &&
+        this.checkIfMultipleClassExistForSameTime(availableClasses)
+      ) {
+        const times = availableClasses.map(
           (gym: Gym) =>
             (gym["distance"] = getDistance(
               {
@@ -47,5 +53,28 @@ export class SuggestionsService {
       console.error("Error while getSuggestions()", error);
       return CommonUtils.serverError(error) as any;
     }
+  }
+
+  // check if more than one class exist for same time
+  checkIfMultipleClassExistForSameTime(availableClasses: Gym[]): boolean {
+    const allAvailableClassesTimes: string[] =
+      this.getTimesForClasses(availableClasses);
+    const isMultiClasses = CommonUtils.checkIfDuplicateExists(
+      allAvailableClassesTimes
+    );
+    console.log("Multiple classes/timeSlot check flag: ", isMultiClasses);
+    return isMultiClasses;
+  }
+
+  // return any of times[string] for all classes
+  getTimesForClasses(gyms: Gym[]): string[] {
+    const classestTimes: string[] = [];
+    const p = gyms.forEach((gym: Gym) => {
+      const timeSlots = gym.weekSchedule[0].dailyTimeSlots;
+      const mapped = timeSlots.forEach((ts: TimeSlot) =>
+        classestTimes.push(ts.time)
+      );
+    });
+    return classestTimes;
   }
 }

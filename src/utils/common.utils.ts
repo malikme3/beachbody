@@ -68,6 +68,10 @@ export class CommonUtils {
     const requestedDay = new Date(`${yyyyMmDdDateString} ${requestedTime}`);
     return classDay > requestedDay ? true : false;
   }
+  // check if string array contain duplicates
+  static checkIfDuplicateExists(ele: string[]) {
+    return new Set(ele).size !== ele.length;
+  }
 
   static notFoundError(entity: string) {
     const error: any = new Error();
