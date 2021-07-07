@@ -12,6 +12,7 @@ const notFound: Handler = (event: any, context: Context) => {
     statusCode: 404,
     body: CommonUtils.notFoundError("PATH"),
   };
+  return response as any;
 };
 
 export { notFound };

@@ -10,20 +10,19 @@ export class SuggestionsService {
   ): Promise<Gym[]> {
     try {
       const gymsWeekSessions = await getGymsSessions();
-      const filteredClasses: Gym[] = [];
+      const availableClasses: Gym[] = [];
       gymsWeekSessions.forEach((gym: Gym) => {
-        const distance = (gym["weekSchedule"] =
-          CommonUtils.filtereClassesByDateAndTime(
-            gym.weekSchedule,
-            requestTime
-          ));
+        gym["weekSchedule"] = CommonUtils.filtereClassesByDateAndTime(
+          gym.weekSchedule,
+          requestTime
+        );
         if (gym["weekSchedule"][0]?.dailyTimeSlots.length > 0) {
-          filteredClasses.push(gym);
+          availableClasses.push(gym);
         }
       });
-
+      // if location provided, order by nearest location first
       if (requestedLocation) {
-        filteredClasses.map(
+        availableClasses.map(
           (gym: Gym) =>
             (gym["distance"] = getDistance(
               {
@@ -36,13 +35,13 @@ export class SuggestionsService {
               }
             ))
         );
-        // sorted gyms classes based on distance[base on corrdinates]
-        return CommonUtils.sortClassedByDistance(filteredClasses);
+        // sorted gyms classes based on distance[base on corrdinates] and return
+        return CommonUtils.sortClassedByDistance(availableClasses);
       }
 
       // sort by score ['descending']
       const classesSortedByScore =
-        CommonUtils.sortClassedByScore(filteredClasses);
+        CommonUtils.sortClassedByScore(availableClasses);
       return classesSortedByScore;
     } catch (error) {
       console.error("Error while getSuggestions()", error);
