@@ -2,6 +2,7 @@ import { Gym, Location, TimeSlot } from "../domain/suggestion.domain";
 import { getDistance } from "geolib";
 import { getGymsSessions } from "../orm/data";
 import { CommonUtils } from "../utils/common.utils";
+import { ErrorUtils } from "../utils/errors.utils";
 
 export class SuggestionsService {
   async getSuggestions(
@@ -51,7 +52,7 @@ export class SuggestionsService {
       return classesSortedByScore;
     } catch (error) {
       console.error("Error while getSuggestions()", error);
-      return CommonUtils.serverError(error) as any;
+      return ErrorUtils.serverError(error) as any;
     }
   }
 

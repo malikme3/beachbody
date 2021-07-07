@@ -1,5 +1,6 @@
 import { Handler, Context, Callback } from "aws-lambda";
 import { CommonUtils } from "../utils/common.utils";
+import { ErrorUtils } from "../utils/errors.utils";
 
 interface HelloResponse {
   statusCode: number;
@@ -10,9 +11,9 @@ const notFound: Handler = (event: any, context: Context) => {
   CommonUtils.log("getSuggestions", "request", event.request);
   const response: HelloResponse = {
     statusCode: 404,
-    body: CommonUtils.notFoundError("PATH"),
+    body: ErrorUtils.notFoundError("PATH"),
   };
-  return response as any;
+  return JSON.stringify(response) as any;
 };
 
 export { notFound };

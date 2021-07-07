@@ -11,6 +11,8 @@ interface HelloResponse {
 
 const getSuggestions: Handler = async (event: any, context: Context) => {
   const query: any = event.queryStringParameters;
+  // for logs audit
+  CommonUtils.log("getSuggestions", "request", event.requestContext);
   const resp: Gym[] | any = await new SuggestionsController().getSuggestions(
     query.date,
     { latitude: query.latitude, longitude: query.longitude } as any
@@ -23,7 +25,7 @@ const getSuggestions: Handler = async (event: any, context: Context) => {
       data: resp,
     },
   };
-  return response;
+  return JSON.stringify(response);
 };
 
 export { getSuggestions };
