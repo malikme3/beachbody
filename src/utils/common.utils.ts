@@ -27,7 +27,7 @@ export class CommonUtils {
     // sanatization for sensitve data
     console.log(`${api} ${type}: ${JSON.stringify(event)}`);
   }
-
+  // sort by gym score
   static sortClassedByScore(gymsClasses: Gym[]): Gym[] {
     return gymsClasses.sort((a, b) => {
       if (a.score > b.score) return -1;
@@ -35,7 +35,7 @@ export class CommonUtils {
       return 0;
     });
   }
-  // distance in meter[number]
+  // sort by distance in meter[number]
   static sortClassedByDistance(gymsClasses: Gym[]): Gym[] {
     return gymsClasses.sort(
       ({ distance: distanceA }: Gym, { distance: distanceB }: Gym) => {
@@ -54,25 +54,20 @@ export class CommonUtils {
     const _time = h > 12 ? h - 12 + ":" + m + " PM" : h + ":" + m + " AM";
     return `${_time}`;
   }
-
-  //   static getFullYearDate(date: Date): string {
-  //     const _date =
-  //       date.getFullYear() +
-  //       "-" +
-  //       ("0" + (new Date().getMonth() + 1)).slice(-2) +
-  //       "-" +
-  //       ("0" + new Date().getDate()).slice(-2);
-  //     return _date;
-  //   }
-
-  // compare two time string ['2021-07-06 7:47 AM']
-  //   static isFutureClass(requestTime: string, classTime: string): boolean {
-  //     console.log("!!classTime.... ", classTime);
-  //     console.log("!! requestTime.... ", requestTime);
-  //     const isFuture = Date.parse(classTime) > Date.parse(requestTime);
-  //     console.log("isFuture.... ", isFuture);
-  //     return isFuture;
-  //   }
+  /**
+   * classTime string <'10:00 AM'>
+   *  requestedTime <'09:00 AM'>
+   * yyyyMmDdDateString <'2021-07-06'>
+   */
+  static isClassTimePassed(
+    classTime: string,
+    requestedTime: string,
+    yyyyMmDdDateString: string
+  ) {
+    const classDay = new Date(`${yyyyMmDdDateString} ${classTime}`);
+    const requestedDay = new Date(`${yyyyMmDdDateString} ${requestedTime}`);
+    return classDay > requestedDay ? true : false;
+  }
 
   static notFoundError(entity: string) {
     const error: any = new Error();
@@ -86,25 +81,5 @@ export class CommonUtils {
     err["message"] = `request failed due to ${error}`;
     err["statusCode"] = 500;
     throw err;
-  }
-  /**
-   * classTime string <'10:00 AM'>
-   *  requestedTime <'09:00 AM'>
-   * yyyyMmDdDateString <'2021-07-06'>
-   */
-  static isClassTimePassed(
-    classTime: string,
-    requestedTime: string,
-    yyyyMmDdDateString: string
-  ) {
-    console.log("yyyyMmDdDateString, ", yyyyMmDdDateString);
-    console.log("requestedTime, ", requestedTime);
-    const classDay = new Date(`${yyyyMmDdDateString} ${classTime}`);
-    const requestedDay = new Date(`${yyyyMmDdDateString} ${requestedTime}`);
-    return classDay > requestedDay ? true : false;
-  }
-
-  hasDuplicates(array: any[]): boolean {
-    return new Set(array).size !== array.length;
   }
 }

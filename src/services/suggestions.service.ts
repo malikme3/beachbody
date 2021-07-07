@@ -8,11 +8,6 @@ export class SuggestionsService {
     requestTime: string,
     requestedLocation: Location | null
   ): Promise<Gym[]> {
-    const dis = getDistance(
-      { latitude: 51.5103, longitude: 7.49347 },
-      { latitude: "51° 31' N", longitude: "7° 28' E" }
-    );
-    console.log("...\n\n...dist .", dis);
     try {
       const gymsWeekSessions = await getGymsSessions();
       const filteredClasses: Gym[] = [];
@@ -41,14 +36,13 @@ export class SuggestionsService {
               }
             ))
         );
-        const sorted = CommonUtils.sortClassedByDistance(filteredClasses);
-        console.log("........ sorted \n\n", sorted);
+        // sorted gyms classes based on distance[base on corrdinates]
+        return CommonUtils.sortClassedByDistance(filteredClasses);
       }
 
       // sort by score ['descending']
       const classesSortedByScore =
         CommonUtils.sortClassedByScore(filteredClasses);
-
       return classesSortedByScore;
     } catch (error) {
       console.error("Error while getSuggestions()", error);
