@@ -1,19 +1,19 @@
 import { DailySchedule, Gym, TimeSlot } from "../domain/suggestion.domain";
 
 export class CommonUtils {
-  static filtereClassesByDateAndTime(
+  static filterClassesByDateAndTime(
     weekSchedule: DailySchedule[],
     timestamp: string
   ): DailySchedule[] {
     const yyyyMmDdDateString = new Date(timestamp).toISOString().slice(0, 10);
-    const hhmmAmPmString = CommonUtils.getDateAndTime(timestamp);
+    const hhMmAmPmString = CommonUtils.getDateAndTime(timestamp);
     return weekSchedule.filter((dailySchedule: DailySchedule) => {
       if (dailySchedule.date === yyyyMmDdDateString) {
         dailySchedule.dailyTimeSlots = dailySchedule.dailyTimeSlots.filter(
           (slot: TimeSlot) => {
             return CommonUtils.isClassTimePassed(
               slot.time,
-              hhmmAmPmString,
+              hhMmAmPmString,
               yyyyMmDdDateString
             );
           }

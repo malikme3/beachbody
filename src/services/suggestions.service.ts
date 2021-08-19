@@ -13,7 +13,7 @@ export class SuggestionsService {
       const gymsWeekSessions = await getGymsSessions();
       const availableClasses: Gym[] = [];
       gymsWeekSessions.forEach((gym: Gym) => {
-        gym["weekSchedule"] = CommonUtils.filtereClassesByDateAndTime(
+        gym["weekSchedule"] = CommonUtils.filterClassesByDateAndTime(
           gym.weekSchedule,
           requestTime
         );
@@ -21,7 +21,7 @@ export class SuggestionsService {
           availableClasses.push(gym);
         }
       });
-      /**  if location corrdinate are provided in request &&
+      /**  if location coordinate are provided in request &&
        *    more than one classes are available for same timeSlot
        *    then order by nearest location first
        */

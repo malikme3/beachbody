@@ -1,0 +1,166 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: NelNet API
+servers:
+  - url: 'https://dev.nelnet.com'
+    description: Development
+  - url: 'https://qa.nelnet.com'
+    description: QA
+
+paths:
+  /suggestions:
+    get:
+      tags:
+      - "suggestion"
+      summary: "get suggestions"
+      description: "get suggestions for available slots"
+      operationId: "getSuggestions"
+      parameters:
+        - name: start
+          in: query
+          description: >-
+            to get data per pagination index
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          description: >-
+            The maximum number of data to return in this page.
+          schema:
+            type: integer
+            format: int32
+            default: 100
+        - name: sortBy
+          in: query
+          description: >-
+            order based on data points
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/getSuggestionsResponse"
+        "400":
+          $ref: "#/components/responses/erorResponse"
+        "401":
+          $ref: "#/components/responses/erorResponse"  
+        "500":
+          $ref: "#/components/responses/erorResponse"
+      security:
+       - my_auth_2: []
+       - api_key: []
+components:
+  responses:
+    erorResponse:
+      description: "get suggestions response"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"     
+    getSuggestionsResponse:
+      description: "get suggestions response"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Suggestions"
+    getSuggestionResponse:
+      description: "get suggestions response"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Suggestion"        
+  schemas:
+    Error:
+      description: "Representation of suggestions"
+      type: object
+      properties:
+        _error:
+          type: string
+          example: data base error
+        _code: 
+          type: number
+        _message: 
+          type: string
+          example: Error in getSuggestion(), user property is undefined
+    Location:
+      description: Gym location coordinates
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+    DailySchedule:
+      description: Gym daily schedule for location
+      type: object
+      properties:
+        id:
+          type: number
+        code:
+          type: string
+        day:
+          type: string
+        date:
+          type: string
+        dailyTimeSlots: 
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeSlot"
+    TimeSlot:
+      description: Gym daily time slots for location
+      type: object
+      properties:
+        id:
+          type: number
+        time:
+          type: string
+        dateAndTime:
+          type: string
+        type:
+          type: string  
+        available:
+          type: boolean
+    Gym:
+      type: object
+      properties:
+        id:
+          type: string
+        city: 
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+        score:
+          type: number
+        distance?:
+          type: string  
+        location:
+          $ref: "#/components/schemas/Location"
+        weekSchedule:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailySchedule"      
+    Suggestions:
+      type: array
+      items:
+        $ref: "#/components/schemas/Suggestion"
+    Suggestion:
+      $ref: "#/components/schemas/Gym"    
+  securitySchemes:
+    my_auth_2:
+      type: oauth2
+      description: >-
+        For more information, see https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-userpools-server-contract-reference.html
+      flows:
+        authorizationCode:
+          authorizationUrl: https://ok.com.auth.ap-northeast-1.amazoncognito.com/oauth2/authorize
+          tokenUrl: https://ok.com.auth.ap-northeast-1.amazoncognito.com/oauth2/token
+          scopes:
+            openid: openId token
+    api_key:
+      type: 'apiKey'
+      name: 'x-api-key'
+      in: 'header'
